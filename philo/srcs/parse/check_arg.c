@@ -6,16 +6,16 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:54:17 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/18 19:55:19 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/19 15:16:00 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	check_argv(char **argv)
+int	check_if_digit(char **argv)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 1;
 	while (argv[i])
@@ -29,5 +29,23 @@ int	check_argv(char **argv)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	check_argv(char **argv, int argc)
+{
+	if (check_if_digit(argv))
+		return (1);
+	if (ft_atoi(argv[1]) < 1 || ft_atoi(argv[1]) > 200)
+		return (1);
+	if (ft_atoi(argv[2]) < 1)
+		return (1);
+	if (ft_atoi(argv[3]) < 1)
+		return (1);
+	if (ft_atoi(argv[4]) < 1)
+		return (1);
+	if (argc > 5)
+		if (ft_atoi(argv[5]) < 0)
+			return (1);
 	return (0);
 }
