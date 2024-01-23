@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_handle.c                                      :+:      :+:    :+:   */
+/*   free_end.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/22 17:12:59 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/23 17:23:18 by hbelle           ###   ########.fr       */
+/*   Created: 2024/01/23 15:44:11 by hbelle            #+#    #+#             */
+/*   Updated: 2024/01/23 15:49:35 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-size_t	get_current_time(void)
+void	free_end(t_philo *p)
 {
-	struct timeval	time;
+	int i;
 
-	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday() error\n", 22);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-int	ft_usleep(size_t milliseconds)
-{
-	size_t start;
-
-	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-		usleep(500);
-	return (0);
+	i = 0;
+	/*while (i < p->nb_of_philo)
+	{
+		pthread_mutex_destroy(&p->l_forks[i]);
+		pthread_mutex_destroy(&p->r_forks[i]);
+		i++;
+	}*/
+	// pthread_mutex_destroy(&p->lock);
+	free(p->philosopher_threads);
+	/*free(p->l_forks);
+	free(p->r_forks);*/
+	exit(0);
 }

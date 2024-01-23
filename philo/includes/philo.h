@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:46:37 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/22 18:40:26 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/23 17:20:43 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,28 @@
 
 # include <errno.h>
 # include <pthread.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
 
-enum				e_status
-{
-	DEAD,
-	ALIVE
-};
 typedef struct s_philo
 {
+	pthread_mutex_t	lock;
+	pthread_mutex_t	*l_forks;
+	pthread_mutex_t	*r_forks;
+	pthread_t		*philosopher_threads;
+	long int		nb_of_philo;
+	long int		nb_of_fork;
+	uint64_t		time_to_die;
+	uint64_t		time_to_eat;
+	uint64_t		time_to_sleep;
+	uint64_t		start;
+	long int		nb_of_meals;
+	int				id;
 	char			**av;
 	int				ac;
-	int				id;
-	int				eat_count;
-	int				left_fork;
-	int				right_fork;
-	int				sleep;
-	int				is_eating;
-	long			last_eat;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*print;
-	pthread_mutex_t	*eat;
 
 }					t_philo;
 
@@ -50,5 +48,6 @@ void				mutex_error(int status);
 void				error_handle(char *str, int exit_status);
 int					ft_usleep(size_t milliseconds);
 void				*mutex_handle(pthread_mutex_t *mutex, int function_nb);
-
+size_t				get_current_time(void);
+void				free_end(t_philo *p);
 #endif

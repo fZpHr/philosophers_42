@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/22 20:01:24 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/23 17:42:59 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,89 +15,108 @@
 void	routine(t_philo *p)
 {
 	int	i;
+	int	eat_count;
+	int	c_id;
 
+	mutex_handle(&p->lock, 3);
+	p->id++;
+	c_id = p->id;
+	mutex_handle(&p->lock, 4);
 	i = 0;
-	while (1 < 11)
+	eat_count = 0;
+	p->start = get_current_time();
+	while (1)
 	{
-		if (i == 0)
+		if (i % 2 == 0)
+			printf("%ld %d is thinking\n", get_current_time() - p->start, c_id);
+		else if (eat_count != p->nb_of_meals && p->nb_of_fork > 1)
 		{
-			pthread_mutex_lock(&p->forks[0]);
-			printf("philo %d has taken a fork\n", p->id);
-			pthread_mutex_lock(&p->forks[1]);
-			printf("philo %d has taken a fork\n", p->id);
-			printf("philo %d is eating\n", p->id);
-			pthread_mutex_unlock(&p->forks[0]);
-			pthread_mutex_unlock(&p->forks[1]);
-			printf("philo %d is sleeping\n", p->id);
-			printf("philo %d is thinking\n", p->id);
-			i++;
+			mutex_handle(&p->lock, 3);
+			p->nb_of_fork -= 2;
+			printf("%ld %d is eating\n", get_current_time() - p->start, c_id);
+			eat_count++;
+			ft_usleep(p->time_to_eat);
+			p->nb_of_fork += 2;
+			mutex_handle(&p->lock, 4);
+			printf("%ld %d is sleeping\n", get_current_time() - p->start, c_id);
 		}
-		else if (i == 1)
+		if (get_current_time() - p->start > p->time_to_die)
 		{
-			pthread_mutex_lock(&p->forks[1]);
-			printf("philo %d has taken a fork\n", p->id);
-			pthread_mutex_lock(&p->forks[0]);
-			printf("philo %d has taken a fork\n", p->id);
-			printf("philo %d is eating\n", p->id);
-			pthread_mutex_unlock(&p->forks[1]);
-			pthread_mutex_unlock(&p->forks[0]);
-			printf("philo %d is sleeping\n", p->id);
-			printf("philo %d is thinking\n", p->id);
-			i--;
+			printf("%ld %d died\n", get_current_time() - p->start, c_id);
+			break ;
 		}
+		if (p->nb_of_meals != -1 && eat_count == p->nb_of_meals)
+			break ;
+		i++;
 	}
 }
 
-void	create_philo(t_philo *p, int nb_philo)
+void	test(t_philo *p)
+{
+	int	i;
+	int	c_id;
+
+	mutex_handle(&p->lock, 3);
+	p->id++;
+	c_id = p->id;
+	mutex_handle(&p->lock, 4);
+	i = 0;
+	while (i < 5)
+	{
+		printf("%d %d test%d : \n", c_id, i, c_id);
+		i++;
+	}
+}
+
+void	create_philo(t_philo *p)
 {
 	int	i;
 
-	*p = malloc(nb_philo * sizeof(t_philo));
 	i = 0;
-	while (i < p->ac - 1)
+	p->philosopher_threads = malloc(sizeof(pthread_t) * p->nb_of_philo);
+	if (!p->philosopher_threads)
+		error_handle("malloc() error", 1);
+	while (i < p->nb_of_philo)
 	{
-		p[i].id = i;
-		p[i].eat_count = 0;
-		p[i].is_eating = 0;
-		p[i].last_eat = 0;
-		i++;
-	}
-	while (i < philo_nb)
-	{
-		pthread_create(&p[i].thread, NULL, (void *)routine, (void *)&p[i]);
+		pthread_create(&p->philosopher_threads[i], NULL, (void *)routine,
+			(void *)p);
 		i++;
 	}
 }
-void	philo(t_philo *p)
-{
-	pthread_t	t2;
 
-	create_pholo(p);
-	pthread_t t1; // faut creer des threads pour chaque philo
-	if (pthread_create(&t1, NULL, (void *)routine, (void *)p))
-		error_handle("pthread_create() error", 2);
-	if (pthread_create(&t2, NULL, (void *)routine, (void *)p))
-		error_handle("pthread_create() error", 2);
-	pthread_join(t1, NULL);
-	pthread_join(t2, NULL);
+void	join_philo(t_philo *p)
+{
+	int	i;
+
+	i = 0;
+	while (i < p->nb_of_philo)
+	{
+		pthread_join(p->philosopher_threads[i], NULL);
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
 {
 	t_philo p;
 
-	init(&p);
-	p.av = argv;
-	p.ac = argc;
 	if ((argc < 5 || argc > 6) || check_argv(argv, argc))
 	{
-		printf("\033[0;31mError: bad arguments\033[0m\n");
+		error_handle("Error: bad arguments,Usage [INT > 1] [0 > INT =< 200] [INT > 0] [INT >= 0] [OPTIONAL INT >= 0]",
+			1);
 		return (1);
 	}
 	else
 	{
-		philo(&p);
-		// free_end(&p, 0);
+		p.av = argv;
+		p.ac = argc;
+		init(&p);
+		mutex_handle(&p.lock, 1);
+		pthread_mutex_init(&p.lock, NULL);
+		create_philo(&p);
+		join_philo(&p);
+		mutex_handle(&p.lock, 2);
+		free_end(&p);
 	}
 	return (0);
 }

@@ -10,6 +10,9 @@
         "initializer_list": "c",
         "ranges": "c",
         "span": "c",
-        "utility": "c"
+        "utility": "c",
+        "compare": "c",
+        "stdint.h": "c",
+        "unistd.h": "c"
     }
 }
