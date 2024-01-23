@@ -6,17 +6,20 @@
 #    By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/05 17:52:23 by hbelle            #+#    #+#              #
-#    Updated: 2024/01/19 16:25:25 by hbelle           ###   ########.fr        #
+#    Updated: 2024/01/22 18:12:13 by hbelle           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo
 
-SRCS	=	main.c\
-	utils_ext/ft_isdigit.c\
-	utils_ext/ft_atoi.c\
+SRCS	=	main.c \
+	utils_ext/ft_isdigit.c \
+	utils_ext/ft_atoi.c \
 	srcs/parse/check_arg.c \
 	srcs/utils/init.c \
+	srcs/utils/errors.c \
+	srcs/utils/malloc_mutex.c \
+	srcs/utils/time_handle.c \
 
 OBJ_DIR = .o
 OBJTS = $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))

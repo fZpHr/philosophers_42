@@ -4,6 +4,12 @@
         "readline.h": "c",
         "builtins.h": "c",
         "exec.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "span": "c",
+        "utility": "c"
     }
 }
