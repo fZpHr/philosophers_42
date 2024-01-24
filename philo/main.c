@@ -6,11 +6,43 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/23 17:42:59 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/24 17:41:14 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
+
+void	create_fork(t_philo *p)
+{
+	int	i;
+
+	i = 0;
+	p->forks = malloc(sizeof(pthread_mutex_t) * p->nb_of_fork);
+	if (!p->forks)
+		error_handle("malloc() error", 1);
+	while (i < p->nb_of_fork)
+	{
+		pthread_mutex_init(&p->forks[i], NULL);
+		i++;
+	}
+}
+void	fork_handle(t_philo *p, int c_id, int cmd)
+{
+	int	cur;
+
+	if (c_id == p->nb_of_philo)
+	{
+		cur = c_id + 1;
+		mutex_handle(&p->forks[cur], cmd);
+		mutex_handle(&p->forks[0], cmd);
+	}
+	else
+	{
+		cur = c_id + 1;
+		mutex_handle(&p->forks[cur], cmd);
+		mutex_handle(&p->forks[cur + 1], cmd);
+	}
+}
 
 void	routine(t_philo *p)
 {
@@ -32,13 +64,19 @@ void	routine(t_philo *p)
 		else if (eat_count != p->nb_of_meals && p->nb_of_fork > 1)
 		{
 			mutex_handle(&p->lock, 3);
-			p->nb_of_fork -= 2;
+			fork_handle(p, c_id, 3);
+			printf("%ld %d has taken a fork\n", get_current_time() - p->start,
+				c_id);
+			printf("%ld %d has taken a fork\n", get_current_time() - p->start,
+				c_id);
 			printf("%ld %d is eating\n", get_current_time() - p->start, c_id);
 			eat_count++;
 			ft_usleep(p->time_to_eat);
 			p->nb_of_fork += 2;
+			fork_handle(p, c_id, 4);
 			mutex_handle(&p->lock, 4);
 			printf("%ld %d is sleeping\n", get_current_time() - p->start, c_id);
+			ft_usleep(p->time_to_sleep);
 		}
 		if (get_current_time() - p->start > p->time_to_die)
 		{
@@ -112,10 +150,9 @@ int	main(int argc, char **argv)
 		p.ac = argc;
 		init(&p);
 		mutex_handle(&p.lock, 1);
-		pthread_mutex_init(&p.lock, NULL);
+		create_fork(&p);
 		create_philo(&p);
 		join_philo(&p);
-		mutex_handle(&p.lock, 2);
 		free_end(&p);
 	}
 	return (0);

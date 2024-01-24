@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 17:12:59 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/23 17:23:18 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/24 14:42:20 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	get_current_time(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday() error\n", 22);
+		error_handle("gettimeofday() error", 1);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 

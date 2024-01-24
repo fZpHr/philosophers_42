@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:46:37 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/23 17:20:43 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/24 14:02:26 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 typedef struct s_philo
 {
 	pthread_mutex_t	lock;
-	pthread_mutex_t	*l_forks;
-	pthread_mutex_t	*r_forks;
+	pthread_mutex_t	*forks;
 	pthread_t		*philosopher_threads;
 	long int		nb_of_philo;
 	long int		nb_of_fork;

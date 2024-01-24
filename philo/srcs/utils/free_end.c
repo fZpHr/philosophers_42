@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 15:44:11 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/23 15:49:35 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:19:31 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,13 @@
 
 void	free_end(t_philo *p)
 {
-	int i;
+	long int i;
 
 	i = 0;
-	/*while (i < p->nb_of_philo)
-	{
-		pthread_mutex_destroy(&p->l_forks[i]);
-		pthread_mutex_destroy(&p->r_forks[i]);
-		i++;
-	}*/
-	// pthread_mutex_destroy(&p->lock);
+	while (i < p->nb_of_philo)
+		mutex_handle(&p->forks[i++], 2);
+	mutex_handle(&p->lock, 2);
 	free(p->philosopher_threads);
-	/*free(p->l_forks);
-	free(p->r_forks);*/
+	free(p->forks);
 	exit(0);
 }
