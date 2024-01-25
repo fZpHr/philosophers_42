@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/25 19:53:06 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/25 19:57:41 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	fork_handle(t_philo *p, int c_id, int cmd, uint64_t last_meal)
 	if (cmd == 3)
 	{
 		waiting = get_current_time();
-		time_last_meal = waiting - last_meal;
+		time_last_meal = waiting + last_meal;
 		if (left_fork > right_fork)
 		{
 			mutex_handle(&p->forks[right_fork], cmd);
