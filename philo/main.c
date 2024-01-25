@@ -17,7 +17,7 @@ void	create_fork(t_philo *p)
 	int	i;
 
 	i = 0;
-	p->forks = malloc(sizeof(pthread_mutex_t) * p->nb_of_fork);
+	p->forks = malloc(sizeof(pthread_mutex_t) * p->nb_of_fork );
 	if (!p->forks)
 		error_handle("malloc() error", 1);
 	while (i < p->nb_of_fork)
@@ -26,7 +26,7 @@ void	create_fork(t_philo *p)
 		i++;
 	}
 }
-void	fork_handle(t_philo *p, int c_id, int cmd)
+/*void	fork_handle(t_philo *p, int c_id, int cmd)
 {
 	int	cur;
 
@@ -41,6 +41,26 @@ void	fork_handle(t_philo *p, int c_id, int cmd)
 		cur = c_id + 1;
 		mutex_handle(&p->forks[cur], cmd);
 		mutex_handle(&p->forks[cur + 1], cmd);
+	}
+}*/
+
+void	fork_handle(t_philo *p, int c_id, int cmd)
+{
+	int left_fork;
+	int right_fork;
+
+	left_fork = c_id % p->nb_of_fork;
+	right_fork = (c_id + 1) % p->nb_of_fork;
+
+	if (cmd == 3)
+	{
+		mutex_handle(&p->forks[left_fork], cmd);
+		mutex_handle(&p->forks[right_fork], cmd);
+	}
+	else if (cmd == 4)
+	{
+		mutex_handle(&p->forks[left_fork], cmd);
+		mutex_handle(&p->forks[right_fork], cmd);
 	}
 }
 
@@ -72,7 +92,6 @@ void	routine(t_philo *p)
 			printf("%ld %d is eating\n", get_current_time() - p->start, c_id);
 			eat_count++;
 			ft_usleep(p->time_to_eat);
-			p->nb_of_fork += 2;
 			fork_handle(p, c_id, 4);
 			mutex_handle(&p->lock, 4);
 			printf("%ld %d is sleeping\n", get_current_time() - p->start, c_id);
