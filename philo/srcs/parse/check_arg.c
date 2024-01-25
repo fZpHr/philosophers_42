@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:54:17 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/23 13:24:17 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/25 13:47:19 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	check_argv(char **argv, int argc)
 {
 	if (check_if_digit(argv))
 		return (1);
-	if (ft_atoi(argv[1]) < 2 || ft_atoi(argv[1]) > 200)
+	if (ft_atoi(argv[1]) < 1 || ft_atoi(argv[1]) > 200)
 		return (1);
 	if (ft_atoi(argv[2]) < 1)
 		return (1);

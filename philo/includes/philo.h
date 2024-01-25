@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:46:37 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/24 14:02:26 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/25 16:35:48 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef struct s_philo
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
-	uint64_t		start;
 	long int		nb_of_meals;
 	int				id;
 	char			**av;

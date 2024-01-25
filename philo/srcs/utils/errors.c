@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 14:09:12 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/23 16:52:44 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/25 14:14:10 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error_handle(char *str, int exit_status)
 {
-	printf("\033[0;31m%s\033[0;31m\n", str);
+	printf("\033[0;31m%s\033[00m\n", str);
 	if (exit_status == 1)
 		exit(1);
 	else if (exit_status == 2)
