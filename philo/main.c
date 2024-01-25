@@ -26,57 +26,34 @@ void	create_fork(t_philo *p)
 		i++;
 	}
 }
-/*void	fork_handle(t_philo *p, int c_id, int cmd)
-{
-	int	cur;
-	int	left_fork;
-	int	right_fork;
-	int	left_fork;
-	int	right_fork;
 
-	if (c_id == p->nb_of_philo)
-	{
-		cur = c_id + 1;
-		mutex_handle(&p->forks[cur], cmd);
-		mutex_handle(&p->forks[0], cmd);
-	}
-	else
-	{
-		cur = c_id + 1;
-		mutex_handle(&p->forks[cur], cmd);
-		mutex_handle(&p->forks[cur + 1], cmd);
-	}
-}*/
 int	fork_handle(t_philo *p, int c_id, int cmd, uint64_t last_meal)
 {
 	int		left_fork;
 	int		right_fork;
-	uint64_t	waiting;
-	uint64_t	time_last_meal;
+	//uint64_t	waiting;
+	//uint64_t	time_last_meal;
 	
 	
 	left_fork = (c_id - 1) % p->nb_of_fork;
 	right_fork = c_id  % p->nb_of_fork;
 	if (cmd == 3)
 	{
-		waiting = get_current_time();
-		time_last_meal = waiting + last_meal;
+		//waiting = get_current_time() - last_meal;   1000 1100     10
+		//time_last_meal = waiting + last_meal;
 		if (left_fork > right_fork)
 		{
 			mutex_handle(&p->forks[right_fork], cmd);
 			mutex_handle(&p->forks[left_fork], cmd);
-			if (time_last_meal + get_current_time() -  waiting > p->time_to_die)
+			if (get_current_time() - last_meal > p->time_to_die)
 				return (1);
 		}
 		else
 		{
 			mutex_handle(&p->forks[left_fork], cmd);
 			mutex_handle(&p->forks[right_fork], cmd);
-			if (time_last_meal + get_current_time() -  waiting > p->time_to_die)
-			{
-				printf("\033[0;31m%ld %d died\n\033[00m", (time_last_meal + get_current_time() -  waiting) , c_id);
+			if ((get_current_time() - last_meal > p->time_to_die))
 				return (1);
-			}
 		}
 	}
 	else if (cmd == 4)
@@ -121,6 +98,7 @@ void	routine(t_philo *p)
 			if ((fork_handle(p, c_id, 3, last_meal) == 1))
 			{
 				fork_handle(p, c_id, 4, last_meal);
+				printf("\033[0;31m%ld %d died\n\033[00m", get_current_time() - start, c_id);
 				break;
 			}
 			if (get_current_time() - last_meal > p->time_to_die)
