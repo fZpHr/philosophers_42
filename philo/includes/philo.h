@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:46:37 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/25 16:35:48 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/26 16:29:54 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,22 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+
 typedef struct s_philo
 {
 	pthread_mutex_t	lock;
+	pthread_mutex_t	print;
+	pthread_mutex_t	monitor;
 	pthread_mutex_t	*forks;
 	pthread_t		*philosopher_threads;
+	pthread_t		monitor_thread_id;
 	long int		nb_of_philo;
 	long int		nb_of_fork;
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
 	long int		nb_of_meals;
+	uint64_t		*last_meal;
 	int				id;
 	char			**av;
 	int				ac;
@@ -40,6 +45,7 @@ typedef struct s_philo
 
 int					check_argv(char **argv, int argc);
 int					ft_atoi(const char *nptr);
+void				printf_handle(char *str, t_philo *p, uint64_t a, uint64_t b);
 int					ft_isdigit(int c);
 void				init(t_philo *p);
 void				mutex_error(int status);

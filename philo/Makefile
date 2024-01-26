@@ -6,7 +6,7 @@
 #    By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/05 17:52:23 by hbelle            #+#    #+#              #
-#    Updated: 2024/01/23 15:48:09 by hbelle           ###   ########.fr        #
+#    Updated: 2024/01/26 16:28:45 by hbelle           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS	=	main.c \
 	srcs/utils/malloc_mutex.c \
 	srcs/utils/time_handle.c \
 	srcs/utils/free_end.c \
+	srcs/utils/printf_handle.c \
 	
 OBJ_DIR = .o
 OBJTS = $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
