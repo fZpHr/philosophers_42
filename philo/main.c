@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/26 18:41:04 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/26 19:05:37 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	monitor_thread_death(t_philo *p)
 			mutex_handle(&p->print, 3);
 			printf("\033[0;31m%ld %d died\n\033[00m", (get_current_time() - p->last_meal[i]) , i);
 			mutex_handle(&p->print, 4);
-            exit(1);
+            return;
         }
 		mutex_handle(&p->meal, 4);
 		mutex_handle(&p->okm, 3);
