@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/26 16:38:44 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/26 17:14:32 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	monitor_thread_death(t_philo *p)
 			mutex_handle(&p->print, 4);
             exit(1);
         }
+		if (p->ok == 1)
+			break ;
 		if (i == p->nb_of_philo)
 			i = 1;
         usleep(10);
@@ -89,6 +91,7 @@ void	routine(t_philo *p)
 	int	i;
 	int	eat_count;
 	int	c_id;
+	int think;
 	uint64_t start;
 
 	usleep(50);
@@ -97,6 +100,7 @@ void	routine(t_philo *p)
 	c_id = p->id;
 	mutex_handle(&p->lock, 4);
 	i = 0;
+	think = 0;
 	eat_count = 0;
 	start = get_current_time();
 	p->last_meal[c_id] = get_current_time();
@@ -106,6 +110,7 @@ void	routine(t_philo *p)
 			usleep(10);
 		if (eat_count != p->nb_of_meals && p->nb_of_fork > 1)
 		{
+			think = 0;
 			fork_handle(p, c_id, 3);
 			printf_handle("%ld %d has taken a fork\n", p, start, c_id);
 			printf_handle("%ld %d has taken a fork\n", p, start, c_id);
@@ -114,12 +119,19 @@ void	routine(t_philo *p)
 			eat_count++;
 			p->last_meal[c_id] = get_current_time();
 			fork_handle(p, c_id, 4);
+			printf_handle("%ld %d is sleeping\n", p, start, c_id);
+			ft_usleep(p->time_to_sleep);
 		}
-		printf_handle("%ld %d is sleeping\n", p, start, c_id);
-		ft_usleep(p->time_to_sleep);
-		printf_handle("%ld %d is thinking\n", p, start, c_id);
+		if (think == 0)
+		{
+			printf_handle("%ld %d is thinking\n", p, start, c_id);
+			think = 1;
+		}
 		if (p->nb_of_meals != -1 && eat_count == p->nb_of_meals)
+		{
+			p->ok = 1;
 			break ;
+		}
 		i++;
 	}
 }

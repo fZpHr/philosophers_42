@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:32:00 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/26 16:36:03 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/26 16:53:17 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	init(t_philo *p)
 	mutex_handle(&p->lock, 1);
 	mutex_handle(&p->monitor, 1);
 	mutex_handle(&p->print, 1);
+	p->ok = 0;
 	p->nb_of_philo = ft_atoi(p->av[1]);
 	p->nb_of_fork = p->nb_of_philo;
 	p->time_to_die = ft_atoi(p->av[2]);
