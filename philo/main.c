@@ -3,41 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpeterea <cpeterea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/26 18:22:43 by cpeterea         ###   ########.fr       */
+/*   Updated: 2024/01/26 18:41:04 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
 
-void	monitor_thread_death(t_philo *p)
+void	monitor_thread_death(t_philo *p) 
 {
-	int	i;
-
+	int i;
+	
 	i = 1;
-	while (1)
+    while (1) 
 	{
 		mutex_handle(&p->meal, 3);
-		if (get_current_time() - p->last_meal[i] > p->time_to_die)
+        if (get_current_time() - p->last_meal[i] > p->time_to_die) 
 		{
 			mutex_handle(&p->meal, 4);
 			mutex_handle(&p->print, 3);
-			printf("\033[0;31m%ld %d died\n\033[00m", (get_current_time()
-					- p->last_meal[i]), i);
+			printf("\033[0;31m%ld %d died\n\033[00m", (get_current_time() - p->last_meal[i]) , i);
 			mutex_handle(&p->print, 4);
-			exit(1);
-		}
+            exit(1);
+        }
 		mutex_handle(&p->meal, 4);
+		mutex_handle(&p->okm, 3);
 		if (p->ok == 1)
+		{
+			mutex_handle(&p->okm, 4);
 			break ;
+		}
+		mutex_handle(&p->okm, 4);
 		if (i == p->nb_of_philo)
 			i = 1;
 		else
 			i++;
-		usleep(10);
-	}
+        usleep(10);
+    }
 }
 
 void	create_fork(t_philo *p)
@@ -57,11 +61,11 @@ void	create_fork(t_philo *p)
 
 int	fork_handle(t_philo *p, int c_id, int cmd)
 {
-	int	left_fork;
-	int	right_fork;
+	int		left_fork;
+	int		right_fork;
 
 	left_fork = (c_id - 1) % p->nb_of_fork;
-	right_fork = c_id % p->nb_of_fork;
+	right_fork = c_id  % p->nb_of_fork;
 	if (cmd == 3)
 	{
 		if (left_fork > right_fork)
@@ -93,11 +97,11 @@ int	fork_handle(t_philo *p, int c_id, int cmd)
 
 void	routine(t_philo *p)
 {
-	int			i;
-	int			eat_count;
-	int			c_id;
-	int			think;
-	uint64_t	start;
+	int	i;
+	int	eat_count;
+	int	c_id;
+	int think;
+	uint64_t start;
 
 	usleep(50);
 	mutex_handle(&p->lock, 3);
@@ -138,7 +142,9 @@ void	routine(t_philo *p)
 		}
 		if (p->nb_of_meals != -1 && eat_count == p->nb_of_meals)
 		{
+			mutex_handle(&p->okm, 3);
 			p->ok = 1;
+			mutex_handle(&p->okm, 4);
 			break ;
 		}
 		i++;
@@ -177,8 +183,7 @@ void	create_philo(t_philo *p)
 		i++;
 	}
 	usleep(100);
-	pthread_create(&p->monitor_thread_id, NULL, (void *)monitor_thread_death,
-		(void *)p);
+	pthread_create(&p->monitor_thread_id, NULL, (void *)monitor_thread_death, (void*)p);
 }
 
 void	join_philo(t_philo *p)
@@ -212,7 +217,7 @@ int	main(int argc, char **argv)
 		create_fork(&p);
 		create_philo(&p);
 		join_philo(&p);
-		free_end(&p);
+		//free_end(&p);
 	}
 	return (0);
 }
