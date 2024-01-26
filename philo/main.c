@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/26 18:06:03 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/26 18:11:19 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@ void	monitor_thread_death(t_philo *p)
             exit(1);
         }
 		mutex_handle(&p->meal, 4);
+		mutex_handle(&p->okm, 3);
 		if (p->ok == 1)
+		{
+			mutex_handle(&p->okm, 4);
 			break ;
+		}
+		mutex_handle(&p->okm, 4);
 		if (i == p->nb_of_philo)
 			i = 1;
         usleep(10);
@@ -135,7 +140,9 @@ void	routine(t_philo *p)
 		}
 		if (p->nb_of_meals != -1 && eat_count == p->nb_of_meals)
 		{
+			mutex_handle(&p->okm, 3);
 			p->ok = 1;
+			mutex_handle(&p->okm, 4);
 			break ;
 		}
 		i++;
