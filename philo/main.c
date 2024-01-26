@@ -6,12 +6,11 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:28:31 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/26 17:14:32 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/26 18:06:03 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
-
 
 void	monitor_thread_death(t_philo *p) 
 {
@@ -20,13 +19,16 @@ void	monitor_thread_death(t_philo *p)
 	i = 1;
     while (1) 
 	{
+		mutex_handle(&p->meal, 3);
         if (get_current_time() - p->last_meal[i] > p->time_to_die) 
 		{
+			mutex_handle(&p->meal, 4);
 			mutex_handle(&p->print, 3);
 			printf("\033[0;31m%ld %d died\n\033[00m", (get_current_time() - p->last_meal[i]) , i);
 			mutex_handle(&p->print, 4);
             exit(1);
         }
+		mutex_handle(&p->meal, 4);
 		if (p->ok == 1)
 			break ;
 		if (i == p->nb_of_philo)
@@ -103,7 +105,9 @@ void	routine(t_philo *p)
 	think = 0;
 	eat_count = 0;
 	start = get_current_time();
+	mutex_handle(&p->meal, 3);
 	p->last_meal[c_id] = get_current_time();
+	mutex_handle(&p->meal, 4);
 	while (1)
 	{
 		if (i % 2 == 0)
@@ -117,7 +121,9 @@ void	routine(t_philo *p)
 			printf_handle("%ld %d is eating\n", p, start, c_id);
 			ft_usleep(p->time_to_eat);
 			eat_count++;
+			mutex_handle(&p->meal, 3);
 			p->last_meal[c_id] = get_current_time();
+			mutex_handle(&p->meal, 4);
 			fork_handle(p, c_id, 4);
 			printf_handle("%ld %d is sleeping\n", p, start, c_id);
 			ft_usleep(p->time_to_sleep);

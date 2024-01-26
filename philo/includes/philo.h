@@ -6,7 +6,7 @@
 /*   By: hbelle <hbelle@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 19:46:37 by hbelle            #+#    #+#             */
-/*   Updated: 2024/01/26 16:52:56 by hbelle           ###   ########.fr       */
+/*   Updated: 2024/01/26 18:04:58 by hbelle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 typedef struct s_philo
 {
 	pthread_mutex_t	lock;
+	pthread_mutex_t	meal;
 	pthread_mutex_t	print;
 	pthread_mutex_t	monitor;
 	pthread_mutex_t	*forks;
