@@ -19,8 +19,10 @@ void	init(t_philo *p)
 	mutex_handle(&p->monitor, 1);
 	mutex_handle(&p->print, 1);
 	mutex_handle(&p->meal, 1);
-	mutex_handle(&p->okm, 1);
-	p->ok = 0;
+	mutex_handle(&p->meal_finishm, 1);
+	mutex_handle(&p->finishm, 1);
+	p->finish = 0;
+	p->meal_finish = 0;
 	p->nb_of_philo = ft_atoi(p->av[1]);
 	p->nb_of_fork = p->nb_of_philo;
 	p->time_to_die = ft_atoi(p->av[2]);

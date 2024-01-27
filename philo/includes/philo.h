@@ -28,7 +28,8 @@ typedef struct s_philo
 	pthread_mutex_t	meal;
 	pthread_mutex_t	print;
 	pthread_mutex_t	monitor;
-	pthread_mutex_t	okm;
+	pthread_mutex_t	finishm;
+	pthread_mutex_t	meal_finishm;
 	pthread_mutex_t	*forks;
 	pthread_t		*philosopher_threads;
 	pthread_t		monitor_thread_id;
@@ -38,7 +39,8 @@ typedef struct s_philo
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
 	long int		nb_of_meals;
-	int				ok;
+	int				meal_finish;
+	int				finish;
 	uint64_t		*last_meal;
 	int				id;
 	char			**av;
@@ -46,9 +48,15 @@ typedef struct s_philo
 
 }					t_philo;
 
+void				join_philo(t_philo *p);
+void				routine(t_philo *p);
+void				fork_handle(t_philo *p, int c_id, int cmd);
+void				create_philo(t_philo *p);
+void				create_fork(t_philo *p);
+void				monitor_thread_death(t_philo *p);
 int					check_argv(char **argv, int argc);
 int					ft_atoi(const char *nptr);
-void				printf_handle(char *str, t_philo *p, uint64_t a, uint64_t b);
+int					printf_handle(char *str, t_philo *p, uint64_t a, uint64_t b);
 int					ft_isdigit(int c);
 void				init(t_philo *p);
 void				mutex_error(int status);
@@ -57,4 +65,5 @@ int					ft_usleep(size_t milliseconds);
 void				*mutex_handle(pthread_mutex_t *mutex, int function_nb);
 size_t				get_current_time(void);
 void				free_end(t_philo *p);
+
 #endif

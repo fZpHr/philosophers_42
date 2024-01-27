@@ -12,89 +12,6 @@
 
 #include "includes/philo.h"
 
-void	monitor_thread_death(t_philo *p) 
-{
-	int i;
-	
-	i = 1;
-    while (1) 
-	{
-		mutex_handle(&p->meal, 3);
-        if (get_current_time() - p->last_meal[i] > p->time_to_die) 
-		{
-			mutex_handle(&p->meal, 4);
-			mutex_handle(&p->print, 3);
-			printf("\033[0;31m%ld %d died\n\033[00m", (get_current_time() - p->last_meal[i]) , i);
-			mutex_handle(&p->print, 4);
-            return;
-        }
-		mutex_handle(&p->meal, 4);
-		mutex_handle(&p->okm, 3);
-		if (p->ok == 1)
-		{
-			mutex_handle(&p->okm, 4);
-			break ;
-		}
-		mutex_handle(&p->okm, 4);
-		if (i == p->nb_of_philo)
-			i = 1;
-		else
-			i++;
-        usleep(10);
-    }
-}
-
-void	create_fork(t_philo *p)
-{
-	int	i;
-
-	i = 0;
-	p->forks = malloc(sizeof(pthread_mutex_t) * p->nb_of_fork);
-	if (!p->forks)
-		error_handle("malloc() error", 1);
-	while (i < p->nb_of_fork)
-	{
-		mutex_handle(&p->forks[i], 1);
-		i++;
-	}
-}
-
-int	fork_handle(t_philo *p, int c_id, int cmd)
-{
-	int		left_fork;
-	int		right_fork;
-
-	left_fork = (c_id - 1) % p->nb_of_fork;
-	right_fork = c_id  % p->nb_of_fork;
-	if (cmd == 3)
-	{
-		if (left_fork > right_fork)
-		{
-			mutex_handle(&p->forks[right_fork], cmd);
-			mutex_handle(&p->forks[left_fork], cmd);
-		}
-		else
-		{
-			mutex_handle(&p->forks[left_fork], cmd);
-			mutex_handle(&p->forks[right_fork], cmd);
-		}
-	}
-	else if (cmd == 4)
-	{
-		if (left_fork > right_fork)
-		{
-			mutex_handle(&p->forks[right_fork], cmd);
-			mutex_handle(&p->forks[left_fork], cmd);
-		}
-		else
-		{
-			mutex_handle(&p->forks[left_fork], cmd);
-			mutex_handle(&p->forks[right_fork], cmd);
-		}
-	}
-	return (0);
-}
-
 void	routine(t_philo *p)
 {
 	int	i;
@@ -123,80 +40,46 @@ void	routine(t_philo *p)
 		{
 			think = 0;
 			fork_handle(p, c_id, 3);
-			printf_handle("%ld %d has taken a fork\n", p, start, c_id);
-			printf_handle("%ld %d has taken a fork\n", p, start, c_id);
-			printf_handle("%ld %d is eating\n", p, start, c_id);
+			if (printf_handle("%ld %d has taken a fork\n", p, start, c_id) == 1)
+			{
+				fork_handle(p, c_id, 4);
+				break ;
+			}
+			if (printf_handle("%ld %d has taken a fork\n", p, start, c_id) == 1)
+			{
+				fork_handle(p, c_id, 4);
+				break ;
+			}
+			if (printf_handle("%ld %d is eating\n", p, start, c_id) == 1)
+			{
+				fork_handle(p, c_id, 4);
+				break ;
+			}
 			ft_usleep(p->time_to_eat);
 			eat_count++;
 			mutex_handle(&p->meal, 3);
 			p->last_meal[c_id] = get_current_time();
 			mutex_handle(&p->meal, 4);
 			fork_handle(p, c_id, 4);
-			printf_handle("%ld %d is sleeping\n", p, start, c_id);
+			if (printf_handle("%ld %d is sleeping\n", p, start, c_id) == 1)
+				break ;
 			ft_usleep(p->time_to_sleep);
 		}
 		if (think == 0)
 		{
-			printf_handle("%ld %d is thinking\n", p, start, c_id);
+			if (printf_handle("%ld %d is thinking\n", p, start, c_id) == 1)
+				break ;
 			think = 1;
 		}
 		if (p->nb_of_meals != -1 && eat_count == p->nb_of_meals)
 		{
-			mutex_handle(&p->okm, 3);
-			p->ok = 1;
-			mutex_handle(&p->okm, 4);
+			mutex_handle(&p->meal_finishm, 3);
+			p->meal_finish = 1;
+			mutex_handle(&p->meal_finishm, 4);
 			break ;
 		}
 		i++;
 	}
-}
-
-void	test(t_philo *p)
-{
-	int	i;
-	int	c_id;
-
-	mutex_handle(&p->lock, 3);
-	p->id++;
-	c_id = p->id;
-	mutex_handle(&p->lock, 4);
-	i = 0;
-	while (i < 5)
-	{
-		printf("%d %d test%d : \n", c_id, i, c_id);
-		i++;
-	}
-}
-
-void	create_philo(t_philo *p)
-{
-	int	i;
-
-	i = 0;
-	p->philosopher_threads = malloc(sizeof(pthread_t) * p->nb_of_philo);
-	if (!p->philosopher_threads)
-		error_handle("malloc() error", 1);
-	while (i < p->nb_of_philo)
-	{
-		pthread_create(&p->philosopher_threads[i], NULL, (void *)routine,
-			(void *)p);
-		i++;
-	}
-	usleep(100);
-	pthread_create(&p->monitor_thread_id, NULL, (void *)monitor_thread_death, (void*)p);
-}
-
-void	join_philo(t_philo *p)
-{
-	int	i;
-
-	i = 0;
-	while (i < p->nb_of_philo)
-	{
-		pthread_join(p->philosopher_threads[i], NULL);
-		i++;
-	}
-	pthread_join(p->monitor_thread_id, NULL);
 }
 
 int	main(int argc, char **argv)
@@ -217,7 +100,7 @@ int	main(int argc, char **argv)
 		create_fork(&p);
 		create_philo(&p);
 		join_philo(&p);
-		//free_end(&p);
+		free_end(&p);
 	}
 	return (0);
 }

@@ -14,13 +14,21 @@
 
 void	free_end(t_philo *p)
 {
-	long int i;
+	int	i;
 
 	i = 0;
-	while (i < p->nb_of_philo)
-		mutex_handle(&p->forks[i++], 2);
+	while (i < p->nb_of_fork)
+	{
+		mutex_handle(&p->forks[i], 2);
+		i++;
+	}
 	mutex_handle(&p->lock, 2);
-	free(p->philosopher_threads);
+	mutex_handle(&p->monitor, 2);
+	mutex_handle(&p->print, 2);
+	mutex_handle(&p->meal, 2);
+	mutex_handle(&p->meal_finishm, 2);
+	mutex_handle(&p->finishm, 2);
 	free(p->forks);
-	exit(0);
+	free(p->last_meal);
+	free(p->philosopher_threads);
 }
