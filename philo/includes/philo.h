@@ -48,6 +48,9 @@ typedef struct s_philo
 
 }					t_philo;
 
+int					handle_meal_finish(t_philo *p, int eat_count);
+int					handle_eating_and_sleeping(t_philo *p, int *eat_count, int c_id, uint64_t start);
+int					handle_thinking(t_philo *p, int *think, uint64_t start, int c_id);
 void				join_philo(t_philo *p);
 void				routine(t_philo *p);
 void				fork_handle(t_philo *p, int c_id, int cmd);
