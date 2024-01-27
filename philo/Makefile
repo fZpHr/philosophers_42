@@ -16,12 +16,11 @@ SRCS	=	main.c \
 	utils_ext/ft_isdigit.c \
 	utils_ext/ft_atoi.c \
 	srcs/parse/check_arg.c \
-	srcs/utils/init.c \
-	srcs/utils/errors.c \
-	srcs/utils/malloc_mutex.c \
+	srcs/utils/mutex_handle.c \
 	srcs/utils/time_handle.c \
-	srcs/utils/free_end.c \
 	srcs/utils/printf_handle.c \
+	srcs/data/init.c \
+	srcs/data/free_end.c \
 	
 OBJ_DIR = .o
 OBJTS = $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
