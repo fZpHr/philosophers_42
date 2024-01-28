@@ -14,7 +14,7 @@
 
 void	increment_id(t_philo *p, int *c_id)
 {
-	usleep(50);
+	//usleep(50);
 	pthread_mutex_lock(&p->lock);
 	p->id++;
 	*c_id = p->id;
@@ -57,6 +57,8 @@ void	routine(t_philo *p)
 		if (handle_thinking(p, &think, start, c_id) == 1)
 			break ;
 		if (handle_meal_finish(p, eat_count) == 1)
+			break ;
+		if (get_current_time() - p->last_meal[c_id] > p->time_to_die)
 			break ;
 		i++;
 	}

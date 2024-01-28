@@ -42,7 +42,7 @@ $(OBJ_DIR)/%.o: %.c
 			\033[36m$*.c\033[032m  [OK] ✅ \033[00m";\
 			else \
 			echo "\033[01m\033[33mCompiling \033[00m\
-			\033[36m$*.c\033[00m\  [Error] ❌ "; fi
+			\033[36m$*.c\033[00m\  [Error] ❌ \033[00m"; fi
 
 $(NAME): $(OBJTS)
 	@cc -o $(NAME) $(OBJTS) $(CFLAGS) $(HEADER)

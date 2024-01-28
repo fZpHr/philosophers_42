@@ -13,7 +13,6 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <errno.h>
 # include <pthread.h>
 # include <stdint.h>
 # include <stdio.h>

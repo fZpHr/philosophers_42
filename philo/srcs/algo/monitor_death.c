@@ -51,6 +51,6 @@ void	monitor_thread_death(t_philo *p)
 			i = 1;
 		else
 			i++;
-		ft_usleep(5);
+		usleep(5);
 	}
 }
