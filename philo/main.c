@@ -12,13 +12,10 @@
 
 #include "includes/philo.h"
 
-
 int	main(int argc, char **argv)
 {
-	t_philo p;
+	t_philo	p;
 
-	int i = 0;
-	
 	if ((argc < 5 || argc > 6) || check_argv(argv, argc))
 	{
 		printf("Error: bad arguments\n");

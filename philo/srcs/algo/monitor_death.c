@@ -12,12 +12,13 @@
 
 #include "../../includes/philo.h"
 
-void    to_late(t_philo *p, int i)
+void	to_late(t_philo *p, int i)
 {
 	pthread_mutex_unlock(&p->meal);
 	pthread_mutex_lock(&p->meal);
 	pthread_mutex_lock(&p->print);
-	printf("\033[0;31m%ld %d died\n\033[00m", (get_current_time() - p->last_meal[i]) , i);
+	printf("\033[0;31m%ld %d died\n\033[00m",
+		(get_current_time() - p->last_meal[i]), i);
 	pthread_mutex_unlock(&p->print);
 	pthread_mutex_unlock(&p->meal);
 	pthread_mutex_lock(&p->finishm);
@@ -25,19 +26,19 @@ void    to_late(t_philo *p, int i)
 	pthread_mutex_unlock(&p->finishm);
 }
 
-void	monitor_thread_death(t_philo *p) 
+void	monitor_thread_death(t_philo *p)
 {
-	int i;
-	
+	int	i;
+
 	i = 1;
-    while (1) 
+	while (1)
 	{
 		pthread_mutex_lock(&p->meal);
-        if (get_current_time() - p->last_meal[i] > p->time_to_die) 
-        {
-            to_late(p, i);
-            break ;
-        }
+		if (get_current_time() - p->last_meal[i] > p->time_to_die)
+		{
+			to_late(p, i);
+			break ;
+		}
 		pthread_mutex_unlock(&p->meal);
 		pthread_mutex_lock(&p->meal_finishm);
 		if (p->meal_finish == 1)
@@ -50,7 +51,6 @@ void	monitor_thread_death(t_philo *p)
 			i = 1;
 		else
 			i++;
-        ft_usleep(5);
-    }
+		ft_usleep(5);
+	}
 }
-

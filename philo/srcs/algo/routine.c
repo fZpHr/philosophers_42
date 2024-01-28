@@ -12,28 +12,29 @@
 
 #include "../../includes/philo.h"
 
-void	increment_id(t_philo *p, int *c_id) 
+void	increment_id(t_philo *p, int *c_id)
 {
-    usleep(50);
-    pthread_mutex_lock(&p->lock);
-    p->id++;
-    *c_id = p->id;
-    pthread_mutex_unlock(&p->lock);
+	usleep(50);
+	pthread_mutex_lock(&p->lock);
+	p->id++;
+	*c_id = p->id;
+	pthread_mutex_unlock(&p->lock);
 }
 
-void	initialize_variables(int *i, int *think, int *eat_count, uint64_t *start) 
+void	initialize_variables(int *i, int *think,
+	int *eat_count, uint64_t *start)
 {
-    *i = 0;
-    *think = 0;
-    *eat_count = 0;
-    *start = get_current_time();
+	*i = 0;
+	*think = 0;
+	*eat_count = 0;
+	*start = get_current_time();
 }
 
-void	update_last_meal(t_philo *p, int c_id) 
+void	update_last_meal(t_philo *p, int c_id)
 {
-    pthread_mutex_lock(&p->meal);
-    p->last_meal[c_id] = get_current_time();
-    pthread_mutex_unlock(&p->meal);
+	pthread_mutex_lock(&p->meal);
+	p->last_meal[c_id] = get_current_time();
+	pthread_mutex_unlock(&p->meal);
 }
 
 void	routine(t_philo *p)

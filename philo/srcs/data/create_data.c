@@ -34,7 +34,8 @@ int	create_philo(t_philo *p)
 		i++;
 	}
 	usleep(10);
-	pthread_create(&p->monitor_thread_id, NULL, (void *)monitor_thread_death, (void*)p);
+	pthread_create(&p->monitor_thread_id, NULL,
+		(void *)monitor_thread_death, (void*)p);
 	return (0);
 }
 
@@ -45,7 +46,7 @@ int	create_fork(t_philo *p)
 	i = 0;
 	p->forks = malloc(sizeof(pthread_mutex_t) * p->nb_of_fork);
 	if (!p->forks)
-	{	
+	{
 		printf("malloc() error");
 		destroy_mutex(p);
 		free(p->last_meal);

@@ -21,7 +21,6 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-
 typedef struct s_philo
 {
 	pthread_mutex_t	lock;
@@ -49,8 +48,10 @@ typedef struct s_philo
 }					t_philo;
 
 int					handle_meal_finish(t_philo *p, int eat_count);
-int					handle_eating_and_sleeping(t_philo *p, int *eat_count, int c_id, uint64_t start);
-int					handle_thinking(t_philo *p, int *think, uint64_t start, int c_id);
+int					handle_eating_and_sleeping(t_philo *p, int *eat_count,
+						int c_id, uint64_t start);
+int					handle_thinking(t_philo *p, int *think,
+						uint64_t start, int c_id);
 void				join_philo(t_philo *p);
 void				routine(t_philo *p);
 void				fork_handle(t_philo *p, int c_id, int cmd);
@@ -59,7 +60,8 @@ int					create_fork(t_philo *p);
 void				monitor_thread_death(t_philo *p);
 int					check_argv(char **argv, int argc);
 int					ft_atoi(const char *nptr);
-int					printf_handle(char *str, t_philo *p, uint64_t a, uint64_t b);
+int					printf_handle(char *str, t_philo *p,
+						uint64_t a, uint64_t b);
 int					ft_isdigit(int c);
 int					init(t_philo *p);
 void				mutex_error(int status);
