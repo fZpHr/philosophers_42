@@ -26,9 +26,9 @@ int handle_eating_and_sleeping(t_philo *p, int *eat_count, int c_id, uint64_t st
         }
         ft_usleep(p->time_to_eat);
         (*eat_count)++;
-        mutex_handle(&p->meal, 3);
+        pthread_mutex_lock(&p->meal);
         p->last_meal[c_id] = get_current_time();
-        mutex_handle(&p->meal, 4);
+        pthread_mutex_unlock(&p->meal);
         fork_handle(p, c_id, 4);
         if (printf_handle("%ld %d is sleeping\n", p, start, c_id) == 1)
             return 1;
@@ -52,9 +52,9 @@ int handle_meal_finish(t_philo *p, int eat_count)
 {
     if (p->nb_of_meals != -1 && eat_count == p->nb_of_meals)
     {
-        mutex_handle(&p->meal_finishm, 3);
+        pthread_mutex_lock(&p->meal_finishm);
         p->meal_finish = 1;
-        mutex_handle(&p->meal_finishm, 4);
+        pthread_mutex_unlock(&p->meal_finishm);
         return 1;
     }
     return 0;

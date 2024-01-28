@@ -17,19 +17,23 @@ int	main(int argc, char **argv)
 {
 	t_philo p;
 
+	int i = 0;
+	
 	if ((argc < 5 || argc > 6) || check_argv(argv, argc))
 	{
-		error_handle("Error: bad arguments,Usage [INT > 0] [0 > INT =< 200] [INT > 0] [INT >= 0] [OPTIONAL INT >= 0]",
-			1);
+		printf("Error: bad arguments\n");
 		return (1);
 	}
 	else
 	{
 		p.av = argv;
 		p.ac = argc;
-		init(&p);
-		create_fork(&p);
-		create_philo(&p);
+		if (init(&p) == 1)
+			return (1);
+		if (create_fork(&p) == 1)
+			return (1);
+		if (create_philo(&p) == 1)
+			return (1);
 		join_philo(&p);
 		free_end(&p);
 	}

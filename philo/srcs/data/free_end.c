@@ -19,15 +19,15 @@ void	free_end(t_philo *p)
 	i = 0;
 	while (i < p->nb_of_fork)
 	{
-		mutex_handle(&p->forks[i], 2);
+		pthread_mutex_destroy(&p->forks[i]);
 		i++;
 	}
-	mutex_handle(&p->lock, 2);
-	mutex_handle(&p->monitor, 2);
-	mutex_handle(&p->print, 2);
-	mutex_handle(&p->meal, 2);
-	mutex_handle(&p->meal_finishm, 2);
-	mutex_handle(&p->finishm, 2);
+	pthread_mutex_destroy(&p->lock);
+	pthread_mutex_destroy(&p->monitor);
+	pthread_mutex_destroy(&p->print);
+	pthread_mutex_destroy(&p->meal);
+	pthread_mutex_destroy(&p->meal_finishm);
+	pthread_mutex_destroy(&p->finishm);
 	free(p->forks);
 	free(p->last_meal);
 	free(p->philosopher_threads);

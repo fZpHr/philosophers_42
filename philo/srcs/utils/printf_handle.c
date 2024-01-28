@@ -14,18 +14,18 @@
 
 int	printf_handle(char *str, t_philo *p, uint64_t a, uint64_t b)
 {
-	mutex_handle(&p->finishm, 3);
+	pthread_mutex_lock(&p->finishm);
 	if (p->finish == 1)
 	{
-		mutex_handle(&p->finishm, 4);
+		pthread_mutex_unlock(&p->finishm);
 		return (1);
 	}
 	else
 	{
-		mutex_handle(&p->finishm, 4);
-		mutex_handle(&p->print, 3);
+		pthread_mutex_unlock(&p->finishm);
+		pthread_mutex_lock(&p->print);
 		printf(str, get_current_time() - a, b);
-		mutex_handle(&p->print, 4);
+		pthread_mutex_unlock(&p->print);
 		return (0);
 	}
 }

@@ -12,15 +12,42 @@
 
 #include "../../includes/philo.h"
 
-void	init(t_philo *p)
+void	init_mutex(t_philo *p)
+{
+	pthread_mutex_init(&p->lock, NULL);
+	pthread_mutex_init(&p->monitor, NULL);
+	pthread_mutex_init(&p->print, NULL);
+	pthread_mutex_init(&p->meal, NULL);
+	pthread_mutex_init(&p->meal_finishm, NULL);
+	pthread_mutex_init(&p->finishm, NULL);
+}
+
+void	destroy_mutex(t_philo *p)
+{
+	pthread_mutex_destroy(&p->lock);
+	pthread_mutex_destroy(&p->monitor);
+	pthread_mutex_destroy(&p->print);
+	pthread_mutex_destroy(&p->meal);
+	pthread_mutex_destroy(&p->meal_finishm);
+	pthread_mutex_destroy(&p->finishm);
+}
+
+void	destroy_mutex_fork(t_philo *p)
+{
+	int	i;
+
+	i = 0;
+	while (i < p->nb_of_fork)
+	{
+		pthread_mutex_destroy(&p->forks[i]);
+		i++;
+	}
+}
+
+int	init(t_philo *p)
 {
 	p->id = 0;
-	mutex_handle(&p->lock, 1);
-	mutex_handle(&p->monitor, 1);
-	mutex_handle(&p->print, 1);
-	mutex_handle(&p->meal, 1);
-	mutex_handle(&p->meal_finishm, 1);
-	mutex_handle(&p->finishm, 1);
+	init_mutex(p);
 	p->finish = 0;
 	p->meal_finish = 0;
 	p->nb_of_philo = ft_atoi(p->av[1]);
@@ -30,9 +57,14 @@ void	init(t_philo *p)
 	p->time_to_sleep = ft_atoi(p->av[4]);
 	p->last_meal = malloc(sizeof(uint64_t) * (p->nb_of_philo + 1));
 	if (!p->last_meal)
-		error_handle("malloc() error", 1);
+	{
+		destroy_mutex(p);
+		printf("malloc() error");
+		return (1);
+	}
 	if (p->av[5])
 		p->nb_of_meals = ft_atoi(p->av[5]);
 	else
 		p->nb_of_meals = -1;
+	return (0);
 }
