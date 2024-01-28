@@ -14,7 +14,6 @@
 
 void	increment_id(t_philo *p, int *c_id)
 {
-	//usleep(50);
 	pthread_mutex_lock(&p->lock);
 	p->id++;
 	*c_id = p->id;
