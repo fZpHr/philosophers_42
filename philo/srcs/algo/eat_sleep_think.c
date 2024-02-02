@@ -44,7 +44,10 @@ int	handle_thinking(t_philo *p, int *think, uint64_t start, int c_id)
 	{
 		if (printf_handle("%ld %d is thinking\n", p, start, c_id) == 1)
 			return (1);
-		*think = 1;
+		if (p->nb_of_fork > 1)
+			*think = 0;
+		else
+			*think = 1;
 	}
 	return (0);
 }
