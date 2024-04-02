@@ -16,6 +16,7 @@ cd philosophers_42
 Then compile the executable using the provided Makefile:
 
 ```bash
+cd philo
 make
 ```
 
